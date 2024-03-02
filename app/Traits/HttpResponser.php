@@ -4,7 +4,6 @@ namespace App\Traits\HttpResponser;
 
 trait HttpResponser
 {
-
     public function sendJsonResponse($success = true, $code = 200, $data)
     {
         return response()->json(

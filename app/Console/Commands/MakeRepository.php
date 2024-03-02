@@ -6,50 +6,49 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-class MakeService extends Command
+
+class MakeRepository extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:service {name}';
+    protected $signature = 'make:repository {name}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new service class';
+    protected $description = 'Create a new repository class';
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
     public function handle()
     {
         $name = $this->argument('name');
-        // dd($name);
-        $servicePath = app_path("Services/{$name}.php");
 
-        if (!File::exists(dirname($servicePath))) {
-            $this->info("Creating directory: " . dirname($servicePath));
-            File::makeDirectory(dirname($servicePath), 0755, true, true);
+        $path = app_path("Repository/{$name}.php");
+        $dirPath = dirname($path);
+        if (!File::exists($dirPath)) {
+            $this->info("Creating directory: {$dirPath}");
+            File::makeDirectory($dirPath, 0755, true, true);
         }
 
-        if (File::exists($servicePath)) {
-            $this->error('Service already exists!');
+        if (File::exists($path)) {
+            $this->error('Repository already exists!');
             return 1;
         }
 
         $stub = str_replace('{{ namespace }}', $this->getNamespace(), $this->getStub());
         $stub = str_replace('{{ className }}', $this->getClassName(), $stub);
 
-        if (File::put($servicePath, $stub)) {
-            $this->info("Service created successfully: {$servicePath}");
+        if (File::put($path, $stub)) {
+            $this->info("Repository created successfully: {$path}");
         } else {
-            $this->error("Failed to create service: {$servicePath}");
+            $this->error("Failed to create repository: {$path}");
         }
 
         return 0;
@@ -57,7 +56,7 @@ class MakeService extends Command
 
     protected function getStub()
     {
-        $stub = file_get_contents('stubs/service.stub');
+        $stub = file_get_contents('stubs/repository.stub');
         $stub = str_replace('{{ namespace }}', $this->getNamespace(), $stub);
         $stub = str_replace('{{ className }}', $this->getClassName(), $stub);
         return $stub;
@@ -66,7 +65,7 @@ class MakeService extends Command
     protected function getNamespace()
     {
         $namespace = trim(implode('\\', array_slice(explode('\\', get_class($this)), 0, -1)), '\\');
-        return $namespace . '\\Services';
+        return $namespace . '\\Repository';
     }
 
     protected function getClassName()

@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Services;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Exception;
 
 class {{ className }}{
     //Services Logic
