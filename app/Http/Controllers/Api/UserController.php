@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\UserService;
+use App\Traits\HttpResponser\HttpResponser;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    use HttpResponser;
     /**
      * Display a listing of the resource.
      */
@@ -61,5 +64,27 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function login(UserService $service)
+    {
+        $user = $service->login();
+
+        if ($user) {
+            return $this->sendJsonResponse(true, 200, $user);
+        } else {
+            return $this->sendErrorResponse(false, 500, $user);
+        }
+    }
+
+    public function register(UserService $service)
+    {
+        $user = $service->register();
+
+        if ($user) {
+            return $this->sendJsonResponse(true, 200, $user);
+        } else {
+            return $this->sendErrorResponse(false, 500, $user);
+        }
     }
 }

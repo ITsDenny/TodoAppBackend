@@ -2,6 +2,17 @@
 
 namespace App\Services;
 
-class UserService{
-    //Services Logic
+class UserService
+{
+
+
+    public function login()
+    {
+        //
+    }
+
+    public function register()
+    {
+        //
+    }
 }
